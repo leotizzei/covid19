@@ -1,13 +1,101 @@
 City;Country;Date;Confirmed;Investigation;Discarded;Deaths;State
-Campinas;Brazil;2020-04-04;65;829;100;4;SP
-Campinas;Brazil;2020-04-03;53;796.0;92.0;3;SP
-Campinas;Brazil;2020-04-02;23;;;1;SP
-Campinas;Brazil;2020-04-01;22;;;1;SP
-Campinas;Brazil;2020-03-31;15;;;1;SP
-Campinas;Brazil;2020-03-30;11;;;0;SP
-Campinas;Brazil;2020-03-27;5;;;0;SP
-Campinas;Brazil;2020-03-26;4;;;0;SP
-Campinas;Brazil;2020-03-25;4;;;0;SP
+Campinas;Brazil;2020-04-06;68;882.0;106.0;4.0;SP
+Campinas;Brazil;2020-04-04;65;829.0;100.0;4.0;SP
+Campinas;Brazil;2020-04-03;53;796.0;92.0;3.0;SP
+Campinas;Brazil;2020-04-02;23;;;1.0;SP
+Campinas;Brazil;2020-04-01;22;;;1.0;SP
+Campinas;Brazil;2020-03-31;15;;;1.0;SP
+Campinas;Brazil;2020-03-30;11;;;0.0;SP
+Campinas;Brazil;2020-03-27;5;;;0.0;SP
+Campinas;Brazil;2020-03-26;4;;;0.0;SP
+Campinas;Brazil;2020-03-25;4;;;0.0;SP
 Campinas;Brazil;2020-03-20;1;;;;SP
 Campinas;Brazil;2020-03-19;1;;;;SP
 Campinas;Brazil;2020-03-18;1;;;;SP
+São Paulo;Brazil;2020-04-04;3202;;;186.0;SP
+Brasília;Brazil;2020-04-04;456;;;7.0;DF
+Brasília;Brazil;2020-04-03;419;;;6.0;DF
+Maceió;Brazil;2020-04-04;17;;;2.0;AL
+Maceió;Brazil;2020-04-03;17;;;2.0;AL
+São Paulo;Brazil;2020-04-03;3202;;;186.0;SP
+São Paulo;Brazil;2020-04-02;2815;;;164.0;SP
+Brasília;Brazil;2020-04-02;400;;;5.0;DF
+Brasília;Brazil;2020-04-01;370;;;4.0;DF
+Maceió;Brazil;2020-04-02;13;;;1.0;AL
+Maceió;Brazil;2020-04-01;13;;;1.0;AL
+São Paulo;Brazil;2020-04-01;2418;;;144.0;SP
+São Paulo;Brazil;2020-03-31;1885;;;121.0;SP
+Brasília;Brazil;2020-03-31;333;;;3.0;DF
+Brasília;Brazil;2020-03-30;312;;;2.0;DF
+Maceió;Brazil;2020-03-31;13;;;1.0;AL
+Maceió;Brazil;2020-03-30;12;;;0.0;AL
+São Paulo;Brazil;2020-03-30;1233;;;103.0;SP
+São Paulo;Brazil;2020-03-27;1044;;;62.0;SP
+Brasília;Brazil;2020-03-29;298;;;1.0;DF
+Brasília;Brazil;2020-03-28;260;;;0.0;DF
+Brasília;Brazil;2020-03-27;241;;;0.0;DF
+Maceió;Brazil;2020-03-29;12;;;0.0;AL
+Maceió;Brazil;2020-03-28;13;;;0.0;AL
+Maceió;Brazil;2020-03-27;11;;;0.0;AL
+Maceió;Brazil;2020-03-26;10;;;0.0;AL
+São Paulo;Brazil;2020-03-26;899;;;53.0;SP
+São Paulo;Brazil;2020-03-25;722;;;44.0;SP
+Brasília;Brazil;2020-03-26;201;;;0.0;DF
+Brasília;Brazil;2020-03-25;191;;;0.0;DF
+Brasília;Brazil;2020-03-24;161;;;0.0;DF
+Brasília;Brazil;2020-03-23;138;;;0.0;DF
+Brasília;Brazil;2020-03-22;117;;;0.0;DF
+Maceió;Brazil;2020-03-25;10;;;0.0;AL
+Maceió;Brazil;2020-03-24;10;;;0.0;AL
+Maceió;Brazil;2020-03-23;8;;;0.0;AL
+Maceió;Brazil;2020-03-22;7;;;0.0;AL
+São Paulo;Brazil;2020-03-20;306;;;9.0;SP
+São Paulo;Brazil;2020-03-19;259;;;5.0;SP
+São Paulo;Brazil;2020-03-18;214;;;;SP
+São Paulo;Brazil;2020-03-17;156;;;1.0;SP
+São Paulo;Brazil;2020-03-16;145;;;;SP
+São Paulo;Brazil;2020-03-14;62;;;;SP
+São Paulo;Brazil;2020-03-12;44;;;;SP
+São Paulo;Brazil;2020-03-11;29;;;;SP
+São Paulo;Brazil;2020-03-10;18;;;;SP
+São Paulo;Brazil;2020-03-09;15;;;;SP
+São Paulo;Brazil;2020-03-08;15;;;;SP
+São Paulo;Brazil;2020-03-07;12;;;;SP
+São Paulo;Brazil;2020-03-05;6;;;;SP
+São Paulo;Brazil;2020-03-04;3;;;;SP
+São Paulo;Brazil;2020-03-03;2;;;;SP
+São Paulo;Brazil;2020-03-02;2;;;;SP
+São Paulo;Brazil;2020-03-01;2;;;;SP
+São Paulo;Brazil;2020-02-29;2;;;;SP
+São Paulo;Brazil;2020-02-28;2;;;;SP
+São Paulo;Brazil;2020-02-27;1;;;;SP
+São Paulo;Brazil;2020-02-26;1;;;;SP
+Brasília;Brazil;2020-03-21;108;;;0.0;DF
+Brasília;Brazil;2020-03-20;87;;;0.0;DF
+Brasília;Brazil;2020-03-19;42;;;0.0;DF
+Brasília;Brazil;2020-03-18;34;;;0.0;DF
+Brasília;Brazil;2020-03-16;19;;;0.0;DF
+Brasília;Brazil;2020-03-15;14;;;0.0;DF
+Brasília;Brazil;2020-03-14;8;;;0.0;DF
+Brasília;Brazil;2020-03-13;2;;;0.0;DF
+Brasília;Brazil;2020-03-12;2;;;0.0;DF
+Brasília;Brazil;2020-03-11;2;;;0.0;DF
+Brasília;Brazil;2020-03-10;1;;;0.0;DF
+Brasília;Brazil;2020-03-09;1;;;0.0;DF
+Brasília;Brazil;2020-03-08;1;;;0.0;DF
+Brasília;Brazil;2020-03-07;1;;;0.0;DF
+Maceió;Brazil;2020-03-21;7;;;0.0;AL
+Maceió;Brazil;2020-03-20;6;;;0.0;AL
+Maceió;Brazil;2020-03-19;4;;;0.0;AL
+Maceió;Brazil;2020-03-18;1;;;0.0;AL
+Maceió;Brazil;2020-03-17;1;;;0.0;AL
+Maceió;Brazil;2020-03-16;1;;;0.0;AL
+Maceió;Brazil;2020-03-13;1;;;0.0;AL
+Maceió;Brazil;2020-03-12;1;;;0.0;AL
+Maceió;Brazil;2020-03-10;1;;;0.0;AL
+Maceió;Brazil;2020-03-09;1;;;0.0;AL
+Maceió;Brazil;2020-03-08;1;;;0.0;AL
+Campinas;Brazil;2020-04-05;26;;;4.0;SP
+São Paulo;Brazil;2020-04-05;3612;;;220.0;SP
+Brasília;Brazil;2020-04-05;468;;;7.0;DF
+Maceió;Brazil;2020-04-05;20;;;2.0;AL

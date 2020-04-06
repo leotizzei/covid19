@@ -195,25 +195,28 @@ def parse_csv_confirmed(csv_confirmed):
     return df
 
 
-def plot_br_cities(df):
+def plot_br_cities(df, city):
     """
 
     Parameters
     ----------
-    df
+    df: pd.DataFrame
+    city: str
 
     Returns
     -------
 
     """
+    subdf = df[df['City'] == city]
     fig = plt.figure(num=None, figsize=(15, 6), dpi=300, facecolor='w', edgecolor='k')
     sns.set_style("whitegrid")
-    g = sns.lineplot(x='Date', y='Confirmed', data=df, marker='o')
-    g = sns.lineplot(x='Date', y='Deaths', data=df, marker='*')
+    g = sns.lineplot(x='Date', y='Confirmed', data=subdf, marker='o')
+    g = sns.lineplot(x='Date', y='Deaths', data=subdf, marker='*')
     g.set(xlabel='Date', ylabel='')
     plt.xticks(rotation=45)
+    g.set_yscale("log")
     plt.tight_layout()
-    filename = 'covid19-br-cities.png'
+    filename = 'covid19-br-{}.png'.format(city)
     plt.savefig(filename, dpi=300)
     plt.close()
     print('Saved {}'.format(filename))
@@ -317,16 +320,17 @@ def parse_br_cities(csv_path):
 
 def main():
 
-    # csv_confirmed = '/home/leonardo/Projects/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
-    # confirmed_df = parse_csv_confirmed(csv_confirmed=csv_confirmed)
-    # plot_total_cases(confirmed_df)
-    # plot_cases_rate(confirmed_df)
-    # deaths_df = parse_csv_deaths(DEATHS_CSV_FILE)
-    # plot_total_deaths(deaths_df)
+    csv_confirmed = '/home/leonardo/Projects/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+    confirmed_df = parse_csv_confirmed(csv_confirmed=csv_confirmed)
+    plot_total_cases(confirmed_df)
+    plot_cases_rate(confirmed_df)
+    deaths_df = parse_csv_deaths(DEATHS_CSV_FILE)
+    plot_total_deaths(deaths_df)
 
     COVID_DATA_CITY = '/home/leonardo/Projects/covid19/data/covidbr-city.csv'
     df = parse_br_cities(COVID_DATA_CITY)
-    plot_br_cities(df)
+    for city in ['Campinas', "São Paulo", "Brasília", "Maceió"]:
+        plot_br_cities(df, city)
 
 
 if __name__ == '__main__':
