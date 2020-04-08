@@ -1,4 +1,5 @@
 City;Country;Date;Confirmed;Investigation;Discarded;Deaths;State
+Campinas;Brazil;2020-04-08;85;956;139;5;SP
 Campinas;Brazil;2020-04-07;70;924;113.0;4.0;SP
 Campinas;Brazil;2020-04-06;68;882.0;106.0;4.0;SP
 Campinas;Brazil;2020-04-05;65;829.0;100.0;4.0;SP
