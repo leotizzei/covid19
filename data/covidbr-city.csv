@@ -1,5 +1,7 @@
 City;Country;Date;Confirmed;Investigation;Discarded;Deaths;State
+Campinas;Brazil;2020-04-07;70;924;113.0;4.0;SP
 Campinas;Brazil;2020-04-06;68;882.0;106.0;4.0;SP
+Campinas;Brazil;2020-04-05;65;829.0;100.0;4.0;SP
 Campinas;Brazil;2020-04-04;65;829.0;100.0;4.0;SP
 Campinas;Brazil;2020-04-03;53;796.0;92.0;3.0;SP
 Campinas;Brazil;2020-04-02;23;;;1.0;SP
@@ -95,7 +97,7 @@ Maceió;Brazil;2020-03-12;1;;;0.0;AL
 Maceió;Brazil;2020-03-10;1;;;0.0;AL
 Maceió;Brazil;2020-03-09;1;;;0.0;AL
 Maceió;Brazil;2020-03-08;1;;;0.0;AL
-Campinas;Brazil;2020-04-05;26;;;4.0;SP
+
 São Paulo;Brazil;2020-04-05;3612;;;220.0;SP
 Brasília;Brazil;2020-04-05;468;;;7.0;DF
 Maceió;Brazil;2020-04-05;20;;;2.0;AL

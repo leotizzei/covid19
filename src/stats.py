@@ -11,6 +11,8 @@ LOWER_BOUND_CASES = 100
 RATE_LOWER_BOUND_CASES = 100
 DEATH_LIMIT=99999999
 SELECTED_COUNTRIES = ['Brazil', 'Germany', 'US', 'Italy', 'Korea, South','Spain']
+MOST_TESTING_COUNTRIES = ['Iceland', 'Norway', 'Switzerland', 'United Arab Emirates', 'Israel', 'Estonia', 'Slovenia',
+                          'Brunei']
 # SELECTED_COUNTRIES = ['Brazil','Italy', 'South Korea', 'US', 'Spain']
 # SELECTED_COUNTRIES = ['Brazil', 'Argentina', 'Chile', 'Venezuela']
 SLASH_COUNTRY = 'Country/Region'
@@ -154,12 +156,13 @@ def plot_total_cases(df):
 #     return df
 
 
-def parse_csv_confirmed(csv_confirmed):
+def parse_csv_confirmed(csv_confirmed, selected_countries):
     """
 
     Parameters
     ----------
     csv_confirmed: str
+    selected_countries: List[str]
 
     Returns
     -------
@@ -172,7 +175,7 @@ def parse_csv_confirmed(csv_confirmed):
     confirmed_list = list()
     country_list = list()
     date_list = list()
-    for country in SELECTED_COUNTRIES:
+    for country in selected_countries:
 
         sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
         for i in range(4, len(sub.columns)):
@@ -214,7 +217,6 @@ def plot_br_cities(df, city):
     g = sns.lineplot(x='Date', y='Deaths', data=subdf, marker='*')
     g.set(xlabel='Date', ylabel='')
     plt.xticks(rotation=45)
-    g.set_yscale("log")
     plt.tight_layout()
     filename = 'covid19-br-{}.png'.format(city)
     plt.savefig(filename, dpi=300)
@@ -222,12 +224,13 @@ def plot_br_cities(df, city):
     print('Saved {}'.format(filename))
 
 
-def parse_csv_deaths(csv_deaths):
+def parse_csv_deaths(csv_deaths, selected_countries):
     """
 
     Parameters
     ----------
     csv_deaths: str
+    selected_countries: List[str]
 
     Returns
     -------
@@ -240,7 +243,7 @@ def parse_csv_deaths(csv_deaths):
     death_list = list()
     country_list = list()
     date_list = list()
-    for country in SELECTED_COUNTRIES:
+    for country in selected_countries:
 
         sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
         for i in range(4, len(sub.columns)):
@@ -303,13 +306,54 @@ def plot_cases_rate(df):
     g = sns.lineplot(x='num_days', y='growth_rate', hue='country', data=df_rate, marker='o')
     g.set(xlabel='number of days', ylabel='growth rate')
     g.set_yscale("log")
-    # plt.show()
     plt.tight_layout()
     filename = 'covid19-growth-rate.png'
     plt.savefig(filename, dpi=300)
     plt.close()
     print('Saved {}'.format(filename))
 
+
+def plot_lethality(confirmed_df, deaths_df):
+    """
+
+    Parameters
+    ----------
+    confirmed_df: pd.DataFrame
+    deaths_df: pd.DataFrame
+
+    Returns
+    -------
+
+    """
+    unique_countries = confirmed_df[SLASH_COUNTRY].unique()
+    lethality_list = list()
+    countries = list()
+    date_list = list()
+    for country in unique_countries:
+        cdf = confirmed_df[confirmed_df[SLASH_COUNTRY] == country]
+        ddf = deaths_df[(deaths_df[SLASH_COUNTRY] == country) & (deaths_df['Deaths'] >= 1)]
+        if ddf.shape[0] > 0 and cdf.shape[0] > 0 and 'date' in ddf.columns:
+            date_ddf = ddf['date'].to_list()
+            first_death_date = sorted(date_ddf)[0]
+            print('First date {} {}'.format(first_death_date.isoformat(), country))
+            for dindex, drow in ddf.iterrows():
+                ddt = drow['date']
+                for cindex, crow in cdf.iterrows():
+                    cdt = crow['date']
+                    if ddt == cdt and drow['Deaths'] > 0:
+                        lethality = drow['Deaths'] / crow['Confirmed']
+                        lethality_list.append(lethality)
+                        countries.append(country)
+                        td = ddt - first_death_date
+                        date_list.append(td.days)
+    df = pd.DataFrame(data={'country': countries, 'lethality': lethality_list, 'date': date_list})
+    print(df.groupby('date').mean())
+    g = sns.lineplot(x='date', y='lethality', hue='country', data=df, marker='o')
+    plt.tight_layout()
+    filename = 'covid19-lethality.png'
+    plt.savefig(filename, dpi=300)
+    plt.close()
+    print('Saved {}'.format(filename))
 
 def parse_br_cities(csv_path):
     mydateparser = lambda x: pd.datetime.strptime(x, "%Y-%m-%d").date()
@@ -321,12 +365,13 @@ def parse_br_cities(csv_path):
 def main():
 
     csv_confirmed = '/home/leonardo/Projects/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
-    confirmed_df = parse_csv_confirmed(csv_confirmed=csv_confirmed)
-    plot_total_cases(confirmed_df)
-    plot_cases_rate(confirmed_df)
-    deaths_df = parse_csv_deaths(DEATHS_CSV_FILE)
-    plot_total_deaths(deaths_df)
-
+    selected_countries = MOST_TESTING_COUNTRIES
+    deaths_df = parse_csv_deaths(DEATHS_CSV_FILE, selected_countries)
+    confirmed_df = parse_csv_confirmed(csv_confirmed=csv_confirmed, selected_countries=selected_countries)
+    # plot_total_cases(confirmed_df)
+    # plot_cases_rate(confirmed_df)
+    # plot_total_deaths(deaths_df)
+    plot_lethality(confirmed_df=confirmed_df, deaths_df=deaths_df)
     COVID_DATA_CITY = '/home/leonardo/Projects/covid19/data/covidbr-city.csv'
     df = parse_br_cities(COVID_DATA_CITY)
     for city in ['Campinas', "São Paulo", "Brasília", "Maceió"]:
