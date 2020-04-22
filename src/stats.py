@@ -10,13 +10,14 @@ UPPER_BOUND_CASES = 999999999
 LOWER_BOUND_CASES = 100
 RATE_LOWER_BOUND_CASES = 100
 DEATH_LIMIT=99999999
-SELECTED_COUNTRIES = ['Brazil', 'Germany', 'US', 'Italy', 'Korea, South','Spain']
+SELECTED_COUNTRIES = ['Brazil', 'Germany', 'US', 'Italy', 'Korea, South', 'Spain', 'United Kingdom']
 MOST_TESTING_COUNTRIES = ['Iceland', 'Norway', 'Switzerland', 'United Arab Emirates', 'Israel', 'Estonia', 'Slovenia',
                           'Brunei']
 # SELECTED_COUNTRIES = ['Brazil','Italy', 'South Korea', 'US', 'Spain']
 # SELECTED_COUNTRIES = ['Brazil', 'Argentina', 'Chile', 'Venezuela']
 SLASH_COUNTRY = 'Country/Region'
 UNDERSCORE_COUNTRY = 'Country_Region'
+PROVINCE_COL = 'Province/State'
 UNDERSCORE_LAST_UPDATE = 'Last_Update'
 WITHOUT_UNDERSCORE_LAST_UPDATE = 'Last Update'
 CONFIRMED_CSV_FILE = '/Users/ltizzei/Projects/covid19/data/time_series_covid19_confirmed_global.csv'
@@ -64,15 +65,15 @@ def plot_total_deaths(df):
     plt.savefig('covid19-deaths.png', dpi=300)
 
 
-def plot_total_cases(df):
+def plot_total_cases(df, countries):
     """
 
     :param df: pd.DataFrame
     :return:
     """
 
-    countries = df[COUNTRY_COLUMN].unique()
-    countries = [c for c in countries if c in SELECTED_COUNTRIES]
+    # countries = df[COUNTRY_COLUMN].unique()
+    # countries = [c for c in countries if c in SELECTED_COUNTRIES]
     num_days = list()
     num_cases = list()
     country_list = list()
@@ -177,8 +178,10 @@ def parse_csv_confirmed(csv_confirmed, selected_countries):
     country_list = list()
     date_list = list()
     for country in selected_countries:
-
-        sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
+        if country == 'United Kingdom':
+            sub = aux[(aux[COUNTRY_COLUMN] == country) & (aux[PROVINCE_COL].isnull())]
+        else:
+            sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
         for i in range(4, len(sub.columns)):
             column_name = sub.columns[i]
             index = column_name.find('/')
@@ -214,12 +217,40 @@ def plot_br_cities(df, city):
     subdf = df[df['City'] == city]
     fig = plt.figure(num=None, figsize=(15, 6), dpi=300, facecolor='w', edgecolor='k')
     sns.set_style("whitegrid")
-    g = sns.lineplot(x='Date', y='Confirmed', data=subdf)
+    g = sns.lineplot(x='Date', y='Confirmed', data=subdf, marker='o')
     g = sns.lineplot(x='Date', y='Deaths', data=subdf, marker='*')
     g.set(xlabel='Date', ylabel='')
     plt.xticks(rotation=45)
     plt.tight_layout()
     filename = 'covid19-br-{}.png'.format(city)
+    plt.savefig(filename, dpi=300)
+    plt.close()
+    print('Saved {}'.format(filename))
+
+
+def plot_br(confirmed_df, deaths_df):
+    """
+
+    Parameters
+    ----------
+    confirmed_df: pd.DataFrame
+    deaths_df: pd.DataFrame
+
+    Returns
+    -------
+
+    """
+    fig = plt.figure(num=None, figsize=(15, 6), dpi=300, facecolor='w', edgecolor='k')
+    sns.set_style("whitegrid")
+    subdf_confirmed = confirmed_df[confirmed_df[COUNTRY_COLUMN] == 'Brazil']
+    subdf_deaths = deaths_df[deaths_df[COUNTRY_COLUMN] == 'Brazil']
+    g = sns.lineplot(x='date', y='Confirmed', data=subdf_confirmed, marker='o')
+    g = sns.lineplot(x='date', y='Deaths', data=subdf_deaths, marker='*')
+    g.set(xlabel='date', ylabel='')
+    g.set_yscale("log")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    filename = 'covid19-br.png'
     plt.savefig(filename, dpi=300)
     plt.close()
     print('Saved {}'.format(filename))
@@ -246,7 +277,10 @@ def parse_csv_deaths(csv_deaths, selected_countries):
     date_list = list()
     for country in selected_countries:
 
-        sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
+        if country == 'United Kingdom':
+            sub = aux[(aux[COUNTRY_COLUMN] == country) & (aux[PROVINCE_COL].isnull())]
+        else:
+            sub = aux[aux[COUNTRY_COLUMN] == country]  # type: pd.DataFrame
         for i in range(4, len(sub.columns)):
             column_name = sub.columns[i]
             index = column_name.find('/')
@@ -267,13 +301,13 @@ def parse_csv_deaths(csv_deaths, selected_countries):
     return df
 
 
-def plot_cases_rate(df):
+def plot_cases_rate(df, countries):
     """
 
     :param df: pd.DataFrame
     :return: 
     """
-    countries = df[COUNTRY_COLUMN].unique()
+    # countries = df[COUNTRY_COLUMN].unique()
     # countries = [c for c in countries if c in SELECTED_COUNTRIES]
     rate = list()
     country_list = list()
@@ -282,27 +316,28 @@ def plot_cases_rate(df):
 
         subdf = df[df[COUNTRY_COLUMN] == country]
         subdf = subdf[subdf[CONFIRMED_COLUMN] >= RATE_LOWER_BOUND_CASES]
-        dates = subdf['date'].to_list()
-        sorted_dates = sorted(dates)
+        if subdf.shape[0] > 0:
+            dates = subdf['date'].to_list()
+            sorted_dates = sorted(dates)
 
-        first = sorted_dates[0]
+            first = sorted_dates[0]
 
-        subdf = subdf.sort_values(by=['date'])
+            subdf = subdf.sort_values(by=['date'])
 
-        for i in range(1, subdf.shape[0]):
-            prev_row = subdf.iloc[i-1, :]
-            row = subdf.iloc[i, :]
-            prev_confirmed = prev_row[CONFIRMED_COLUMN]
-            cur_confirmed = row[CONFIRMED_COLUMN]
-            new_cases = cur_confirmed - prev_confirmed
-            if new_cases > 0:
-                dt = row['date']
-                delta = dt - first  # type: timedelta
-                days = delta.days
-                if days % 5 == 0:
-                    rate.append(new_cases)
-                    country_list.append(country)
-                    num_days.append(days)
+            for i in range(1, subdf.shape[0]):
+                prev_row = subdf.iloc[i-1, :]
+                row = subdf.iloc[i, :]
+                prev_confirmed = prev_row[CONFIRMED_COLUMN]
+                cur_confirmed = row[CONFIRMED_COLUMN]
+                new_cases = cur_confirmed - prev_confirmed
+                if new_cases > 0:
+                    dt = row['date']
+                    delta = dt - first  # type: timedelta
+                    days = delta.days
+                    if days % 5 == 0:
+                        rate.append(new_cases)
+                        country_list.append(country)
+                        num_days.append(days)
     df_rate = pd.DataFrame(data={'growth_rate': rate, 'country': country_list, 'num_days': num_days})
     g = sns.lineplot(x='num_days', y='growth_rate', hue='country', data=df_rate)
     g.set(xlabel='number of days', ylabel='growth rate')
@@ -367,11 +402,12 @@ def main():
 
     csv_confirmed = CONFIRMED_CSV_FILE
     selected_countries = SELECTED_COUNTRIES
-    deaths_df = parse_csv_deaths(DEATHS_CSV_FILE, selected_countries)
-    confirmed_df = parse_csv_confirmed(csv_confirmed=csv_confirmed, selected_countries=selected_countries)
-    plot_total_cases(confirmed_df)
-    plot_cases_rate(confirmed_df)
-    plot_total_deaths(deaths_df)
+    d = parse_csv_deaths(DEATHS_CSV_FILE, selected_countries)
+    c = parse_csv_confirmed(csv_confirmed=csv_confirmed, selected_countries=selected_countries)
+    plot_total_cases(df=c, countries=selected_countries)
+    plot_cases_rate(df=c, countries=selected_countries)
+    plot_total_deaths(d)
+    plot_br(confirmed_df=c, deaths_df=d)
     # plot_lethality(confirmed_df=confirmed_df, deaths_df=deaths_df)
 
     df = parse_br_cities(COVID_DATA_CITY)
