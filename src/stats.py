@@ -301,11 +301,17 @@ def parse_csv_deaths(csv_deaths, selected_countries):
     return df
 
 
-def plot_cases_rate(df, countries):
+def plot_cases_rate(df, countries, col_name, lower_bound):
     """
 
-    :param df: pd.DataFrame
-    :return: 
+    Parameters
+    ----------
+    df
+    countries
+
+    Returns
+    -------
+
     """
     # countries = df[COUNTRY_COLUMN].unique()
     # countries = [c for c in countries if c in SELECTED_COUNTRIES]
@@ -315,7 +321,7 @@ def plot_cases_rate(df, countries):
     for country in countries:
 
         subdf = df[df[COUNTRY_COLUMN] == country]
-        subdf = subdf[subdf[CONFIRMED_COLUMN] >= RATE_LOWER_BOUND_CASES]
+        subdf = subdf[subdf[col_name] >= lower_bound]
         if subdf.shape[0] > 0:
             dates = subdf['date'].to_list()
             sorted_dates = sorted(dates)
@@ -327,23 +333,23 @@ def plot_cases_rate(df, countries):
             for i in range(1, subdf.shape[0]):
                 prev_row = subdf.iloc[i-1, :]
                 row = subdf.iloc[i, :]
-                prev_confirmed = prev_row[CONFIRMED_COLUMN]
-                cur_confirmed = row[CONFIRMED_COLUMN]
-                new_cases = cur_confirmed - prev_confirmed
-                if new_cases > 0:
+                prev = prev_row[col_name]
+                cur = row[col_name]
+                new_cases = cur - prev
+                if i > 0:
                     dt = row['date']
                     delta = dt - first  # type: timedelta
                     days = delta.days
-                    if days % 5 == 0:
-                        rate.append(new_cases)
-                        country_list.append(country)
-                        num_days.append(days)
+                    # if days % 5 == 0:
+                    rate.append(new_cases)
+                    country_list.append(country)
+                    num_days.append(days)
     df_rate = pd.DataFrame(data={'growth_rate': rate, 'country': country_list, 'num_days': num_days})
     g = sns.lineplot(x='num_days', y='growth_rate', hue='country', data=df_rate)
     g.set(xlabel='number of days', ylabel='growth rate')
     g.set_yscale("log")
     plt.tight_layout()
-    filename = 'covid19-growth-rate.png'
+    filename = 'covid19-growth-rate-{}.png'.format(col_name)
     plt.savefig(filename, dpi=300)
     plt.close()
     print('Saved {}'.format(filename))
@@ -391,6 +397,7 @@ def plot_lethality(confirmed_df, deaths_df):
     plt.close()
     print('Saved {}'.format(filename))
 
+
 def parse_br_cities(csv_path):
     mydateparser = lambda x: pd.datetime.strptime(x, "%Y-%m-%d").date()
 
@@ -404,15 +411,16 @@ def main():
     selected_countries = SELECTED_COUNTRIES
     d = parse_csv_deaths(DEATHS_CSV_FILE, selected_countries)
     c = parse_csv_confirmed(csv_confirmed=csv_confirmed, selected_countries=selected_countries)
-    plot_total_cases(df=c, countries=selected_countries)
-    plot_cases_rate(df=c, countries=selected_countries)
-    plot_total_deaths(d)
-    plot_br(confirmed_df=c, deaths_df=d)
+    # plot_total_cases(df=c, countries=selected_countries)
+    for e, col_name, lb in [(c, CONFIRMED_COLUMN, 100), (d, DEATH_COLUMN, 1)]:
+        plot_cases_rate(df=e, countries=selected_countries, col_name=col_name, lower_bound=lb)
+    # plot_total_deaths(d)
+    # plot_br(confirmed_df=c, deaths_df=d)
     # plot_lethality(confirmed_df=confirmed_df, deaths_df=deaths_df)
 
-    df = parse_br_cities(COVID_DATA_CITY)
-    for city in ['Campinas', "São Paulo", "Brasília", "Maceió"]:
-        plot_br_cities(df, city)
+    # df = parse_br_cities(COVID_DATA_CITY)
+    # for city in ['Campinas', "São Paulo", "Brasília", "Maceió"]:
+    #     plot_br_cities(df, city)
 
 
 if __name__ == '__main__':
